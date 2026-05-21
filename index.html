@@ -3,262 +3,478 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GujLaw - સ્વચાલિત કાનૂની અપડેટ્સ</title>
+    <title>Feed Reader - English to Gujarati Auto Translate</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #eef2f5;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
             padding: 20px;
         }
+
         .container {
-            max-width: 1300px;
-            margin: auto;
+            max-width: 1200px;
+            margin: 0 auto;
             background: white;
-            border-radius: 24px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
             overflow: hidden;
         }
-        header {
-            background: linear-gradient(135deg, #0b3b5f, #1e5a7a);
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            padding: 1.5rem 2rem;
+            padding: 30px;
+            text-align: center;
         }
-        header h1 {
-            font-size: 2rem;
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
         }
-        .update-badge {
-            display: inline-block;
-            background: #e67e22;
-            padding: 5px 12px;
-            border-radius: 40px;
-            font-size: 0.8rem;
-            margin-top: 10px;
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
         }
-        .main-grid {
+
+        .controls {
+            padding: 20px 30px;
+            background: #f8f9fa;
+            border-bottom: 1px solid #e0e0e0;
             display: flex;
+            gap: 15px;
             flex-wrap: wrap;
-            gap: 30px;
-            padding: 2rem;
+            align-items: center;
         }
-        .col {
+
+        .source-selector {
             flex: 1;
-            min-width: 300px;
-            background: #ffffff;
-            border-radius: 20px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-            padding: 1.2rem;
-            transition: 0.2s;
+            min-width: 250px;
         }
-        .col h2 {
-            color: #0b3b5f;
-            border-left: 5px solid #e67e22;
-            padding-left: 15px;
-            margin-bottom: 1.5rem;
-            font-size: 1.6rem;
+
+        .source-selector select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #667eea;
+            border-radius: 10px;
+            font-size: 16px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s;
         }
-        .card {
-            background: #fefaf2;
-            border-radius: 16px;
-            padding: 1rem;
-            margin-bottom: 1.5rem;
-            border-left: 4px solid #e67e22;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-            transition: 0.2s;
+
+        .source-selector select:focus {
+            outline: none;
+            border-color: #764ba2;
+            box-shadow: 0 0 0 3px rgba(118, 75, 162, 0.1);
         }
-        .card h3 {
-            color: #1e466e;
-            margin-bottom: 0.5rem;
+
+        .translate-toggle {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 20px;
+            background: white;
+            border-radius: 10px;
+            border: 2px solid #e0e0e0;
+            cursor: pointer;
+            transition: all 0.3s;
+            user-select: none;
         }
-        .date {
-            font-size: 0.75rem;
-            color: #e67e22;
+
+        .translate-toggle:hover {
+            border-color: #667eea;
+        }
+
+        .translate-toggle.active {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        .toggle-switch {
+            position: relative;
+            width: 50px;
+            height: 24px;
+            background: #ccc;
+            border-radius: 12px;
+            transition: all 0.3s;
+        }
+
+        .toggle-switch::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: white;
+            border-radius: 50%;
+            top: 2px;
+            left: 2px;
+            transition: all 0.3s;
+        }
+
+        .translate-toggle.active .toggle-switch {
+            background: #4caf50;
+        }
+
+        .translate-toggle.active .toggle-switch::after {
+            left: 28px;
+        }
+
+        .refresh-btn {
+            padding: 12px 30px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+
+        .refresh-btn:hover {
+            background: #764ba2;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(118, 75, 162, 0.3);
+        }
+
+        .loading {
+            text-align: center;
+            padding: 50px;
+            font-size: 1.2em;
+            color: #667eea;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .feed-container {
+            padding: 30px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 25px;
+        }
+
+        .feed-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+            border: 1px solid #e0e0e0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .feed-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            border-color: #667eea;
+        }
+
+        .feed-source {
+            font-size: 0.85em;
+            color: #667eea;
+            font-weight: 600;
             margin-bottom: 10px;
-            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
-        .content-preview {
-            color: #2d3e50;
-            line-height: 1.5;
-            margin-bottom: 10px;
+
+        .feed-title {
+            font-size: 1.2em;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 15px;
+            line-height: 1.4;
         }
-        .read-more {
-            color: #e67e22;
+
+        .feed-content {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 15px;
+            flex-grow: 1;
+        }
+
+        .feed-date {
+            font-size: 0.85em;
+            color: #999;
+            margin-bottom: 15px;
+        }
+
+        .feed-link {
+            display: inline-block;
+            padding: 10px 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
             text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.3s;
+            text-align: center;
             font-weight: 500;
         }
-        .fb-plugin-container {
-            background: #f0f2f5;
-            border-radius: 16px;
-            padding: 10px;
-            max-height: 600px;
-            overflow-y: auto;
+
+        .feed-link:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(118, 75, 162, 0.3);
         }
-        .loader {
+
+        .error-message {
             text-align: center;
-            padding: 30px;
-            color: #0984e3;
+            padding: 50px;
+            color: #dc3545;
+            font-size: 1.2em;
         }
-        footer {
-            background: #0b3b5f;
+
+        .translate-indicator {
+            display: inline-block;
+            padding: 3px 8px;
+            background: #4caf50;
             color: white;
-            text-align: center;
-            padding: 1rem;
-            font-size: 0.85rem;
+            border-radius: 5px;
+            font-size: 0.75em;
+            margin-left: 10px;
         }
-        @media (max-width: 800px) {
-            .main-grid {
+
+        @media (max-width: 768px) {
+            .feed-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .controls {
                 flex-direction: column;
+            }
+            
+            .header h1 {
+                font-size: 1.8em;
             }
         }
     </style>
 </head>
 <body>
-
-<div class="container">
-    <header>
-        <h1>🇮🇳 GujLaw · ગુજરાત કાનૂની અપડેટ્સ</h1>
-        <p>📡 Facebook પેજ + Blogger પોસ્ટ્સ હમણાંની સાથે આપમેળે અપડેટ થાય છે</p>
-        <div class="update-badge">🔄 છેલ્લું અપડેટ: <span id="lastUpdated">--</span></div>
-    </header>
-
-    <div class="main-grid">
-        <!-- કૉલમ 1: Blogger પોસ્ટ્સ (API વડે) -->
-        <div class="col">
-            <h2>📘 Blogger · નવીનતમ પોસ્ટ્સ</h2>
-            <div id="bloggerPostsContainer">
-                <div class="loader">⏳ Blogger પોસ્ટ્સ લાવી રહ્યા છીએ...</div>
-            </div>
+    <div class="container">
+        <div class="header">
+            <h1>📰 ફીડ રીડર</h1>
+            <p>English to Gujarati Auto Translate Feed Reader</p>
         </div>
-
-        <!-- કૉલમ 2: Facebook પેજની પોસ્ટ્સ (Plugin - No Token Need) -->
-        <div class="col">
-            <h2>📘 Facebook · gujlaw પેજની પોસ્ટ્સ</h2>
-            <div id="fb-root"></div>
-            <div class="fb-plugin-container" id="facebookPluginBox">
-                <div class="loader">📱 Facebook પ્લગિન લોડ થઈ રહ્યું છે...</div>
+        
+        <div class="controls">
+            <div class="source-selector">
+                <select id="feedSource">
+                    <optgroup label="Legal News (English)">
+                        <option value="https://api.allorigins.win/raw?url=https://www.livelaw.in/google_feeds.xml">Live Law</option>
+                        <option value="https://api.allorigins.win/raw?url=https://lawbeat.in/google_feeds.xml">Law Beat</option>
+                        <option value="https://api.allorigins.win/raw?url=https://www.barandbench.com/feed/">Bar & Bench</option>
+                        <option value="https://api.allorigins.win/raw?url=https://www.scconline.com/blog/feed/">SCC Times</option>
+                    </optgroup>
+                    <optgroup label="English News">
+                        <option value="https://api.allorigins.win/raw?url=https://www.thehindu.com/news/national/feeder/default.rss">The Hindu - National</option>
+                    </optgroup>
+                    <optgroup label="Divya Bhaskar (Gujarati)">
+                        <option value="https://api.allorigins.win/raw?url=https://www.divyabhaskar.co.in/rss-v1--category-1037.xml">ઈન્ડિયા | દિવ્ય ભાસ્કર</option>
+                        <option value="https://api.allorigins.win/raw?url=https://www.divyabhaskar.co.in/rss-v1--category-970.xml">સ્પોર્ટ્સ | દિવ્ય ભાસ્કર</option>
+                    </optgroup>
+                </select>
             </div>
-            <p style="font-size:12px; margin-top:10px;">✅ Facebook પેજની જાહેર પોસ્ટ્સ સીધી અહીં દેખાશે.</p>
+            
+            <div class="translate-toggle active" id="translateToggle" onclick="toggleTranslation()">
+                <span>Auto Translate</span>
+                <div class="toggle-switch"></div>
+                <span>EN → ગુ</span>
+            </div>
+            
+            <button class="refresh-btn" onclick="loadFeed()">
+                🔄 Refresh Feed
+            </button>
+        </div>
+        
+        <div id="feedContent">
+            <div class="loading">
+                <div class="spinner"></div>
+                <p>Loading feed...</p>
+            </div>
         </div>
     </div>
 
-    <!-- તમારા હાલના મેન્યુઅલ અપડેટ્સ જેવા કે Supreme Court, High Court વિભાગ અહીં ઉમેરી શકો છો -->
-    <div style="padding: 0 2rem 2rem 2rem;">
-        <h2 style="color:#0b3b5f;">⚖️ વિશેષ કાનૂની અપડેટ્સ (GujLaw Archive)</h2>
-        <div style="display:flex; flex-wrap:wrap; gap:1rem; margin-top:1rem;">
-            <div style="background:#eef2fa; padding:1rem; border-radius:16px; flex:1;">📌 Supreme Court: નવા ફौजदારી કાયદા 1 જુલાઈથી લાગુ</div>
-            <div style="background:#eef2fa; padding:1rem; border-radius:16px; flex:1;">📌 Gujarat HC: કોન્ટ્રાક્ટ ફાર્મિંગ પર ઐતિહાસિક ચુકાદો</div>
-            <div style="background:#eef2fa; padding:1rem; border-radius:16px; flex:1;">📌 NCLAT: રિયલ્ટર સામે દેવાળિયા રોકાયા</div>
-        </div>
-    </div>
+    <script>
+        let autoTranslate = true;
+        let currentFeed = null;
 
-    <footer>
-        © 2025 GujLaw · કાનૂની માહિતી માટે સત્તાવાર સ્ત્રોત તપાસો · ઓટો-અપડેટ દર 2 કલાકે
-    </footer>
-</div>
-
-<!-- Facebook SDK (પ્લગિન માટે જરૂરી) -->
-<script async defer crossorigin="anonymous" src="https://connect.facebook.net/gu_IN/sdk.js#xfbml=1&version=v18.0"></script>
-
-<script>
-    // ============== કૃપા કરીને તમારી Blogger વિગતો અહીં મૂકો ==============
-    const BLOGGER_API_KEY = "તમારી_API_કી";      // Blogger API key (Google Cloud Console)
-    const BLOG_ID = "તમારો_બ્લોગ_ID";            // Blogger blog ID
-    // ===================================================================
-
-    // ---------- Facebook Page Plugin ને dynamically દાખલ કરવું ----------
-    function loadFacebookPagePlugin() {
-        const container = document.getElementById("facebookPluginBox");
-        if(!container) return;
-        // Facebook પેજ પ્લગિન - "gujlaw" પેજ ID અથવા username
-        const pageUrl = "https://www.facebook.com/gujlaw";  // તમારું FB પેજ
-        container.innerHTML = `
-            <div class="fb-page" 
-                data-href="${pageUrl}"
-                data-tabs="timeline"
-                data-width="500"
-                data-height="550"
-                data-small-header="false"
-                data-adapt-container-width="true"
-                data-hide-cover="false"
-                data-show-facepile="true">
-            </div>
-        `;
-        // ફરીથી FB SDK ને પ્લગિન પાર્સ કરવા માટે (જો SDK પહેલેથી લોડ હોય)
-        if (typeof FB !== 'undefined') {
-            FB.XFBML.parse(container);
-        }
-    }
-
-    // ---------- Blogger API વડે પોસ્ટ્સ લાવવી ----------
-    async function fetchBloggerPosts() {
-        const container = document.getElementById("bloggerPostsContainer");
-        if (!BLOGGER_API_KEY || BLOGGER_API_KEY === "તમારી_API_કી" || !BLOG_ID || BLOG_ID === "તમારો_બ્લોગ_ID") {
-            container.innerHTML = `<div class="card"><strong>⚠️ Blogger API key / Blog ID સેટ કરો.</strong><br>Google Cloud Console માંથી Blogger API enable કરીને key મેળવો.</div>
-                                    <div class="card"><strong>📢 નમૂનારૂપ પોસ્ટ્સ:</strong><br>• Supreme Court: નવા ક્રિમિનલ લો અમલીકરણ<br>• Gujarat HC: રિયલ એસ્ટેટ મોડલ કોડમાં સુધારો</div>`;
-            return;
-        }
-        const url = `https://www.googleapis.com/blogger/v3/blogs/${BLOG_ID}/posts?key=${BLOGGER_API_KEY}&maxResults=5`;
-        try {
-            const response = await fetch(url);
-            const data = await response.json();
-            if (data.items && data.items.length > 0) {
-                renderBloggerPosts(data.items);
+        // Toggle translation
+        function toggleTranslation() {
+            autoTranslate = !autoTranslate;
+            const toggle = document.getElementById('translateToggle');
+            if (autoTranslate) {
+                toggle.classList.add('active');
             } else {
-                container.innerHTML = "<div class='card'>કોઈ બ્લોગર પોસ્ટ નથી અથવા API ઍક્સેસ નથી</div>";
+                toggle.classList.remove('active');
             }
-        } catch (error) {
-            console.error("Blogger API error:", error);
-            container.innerHTML = "<div class='card'>Blogger API ઍક્સેસમાં સમસ્યા, પછી પ્રયત્ન કરો.</div>";
+            // Reload feed with new translation setting
+            if (currentFeed) {
+                displayFeed(currentFeed);
+            }
         }
-    }
 
-    function renderBloggerPosts(posts) {
-        const container = document.getElementById("bloggerPostsContainer");
-        container.innerHTML = "";
-        posts.forEach(post => {
-            const card = document.createElement("div");
-            card.className = "card";
-            const title = post.title || "શીર્ષક વગર";
-            const publishedDate = new Date(post.published).toLocaleString("gu-IN", {day:'numeric', month:'short', year:'numeric'});
-            let plainContent = post.content ? post.content.replace(/<[^>]*>/g, ' ').substring(0, 180) : post.description || "";
-            card.innerHTML = `
-                <h3>📄 ${title}</h3>
-                <div class="date">📅 ${publishedDate}</div>
-                <div class="content-preview">${plainContent}...</div>
-                <a href="${post.url}" target="_blank" class="read-more">સંપૂર્ણ વાંચો →</a>
+        // Load RSS feed
+        async function loadFeed() {
+            const feedContent = document.getElementById('feedContent');
+            feedContent.innerHTML = `
+                <div class="loading">
+                    <div class="spinner"></div>
+                    <p>Loading feed...</p>
+                </div>
             `;
-            container.appendChild(card);
-        });
-    }
 
-    // ---------- ટાઈમસ્ટેમ્પ અપડેટ ----------
-    function updateTimestamp() {
-        const now = new Date();
-        document.getElementById("lastUpdated").innerHTML = now.toLocaleString("gu-IN");
-    }
+            const feedUrl = document.getElementById('feedSource').value;
 
-    // ---------- ઓટો રિફ્રેશ (દર 2 કલાકે) ----------
-    function refreshAll() {
-        fetchBloggerPosts();
-        updateTimestamp();
-        // Facebook plugin automatically shows latest posts, no need to re-parse unless you want
-        if (typeof FB !== 'undefined') {
-            FB.XFBML.parse();
+            try {
+                const response = await fetch(feedUrl);
+                const xmlText = await response.text();
+                const parser = new DOMParser();
+                const xmlDoc = parser.parseFromString(xmlText, 'text/xml');
+                
+                // Check if it's RSS or Atom feed
+                const items = xmlDoc.querySelectorAll('item') || xmlDoc.querySelectorAll('entry');
+                
+                if (items.length === 0) {
+                    throw new Error('No feed items found');
+                }
+
+                const feedData = {
+                    title: xmlDoc.querySelector('channel > title')?.textContent || 
+                           xmlDoc.querySelector('feed > title')?.textContent || 'Feed',
+                    items: []
+                };
+
+                items.forEach(item => {
+                    const title = item.querySelector('title')?.textContent || 'No title';
+                    const link = item.querySelector('link')?.textContent || 
+                                item.querySelector('link')?.getAttribute('href') || '#';
+                    const description = item.querySelector('description')?.textContent || 
+                                      item.querySelector('summary')?.textContent || 
+                                      item.querySelector('content')?.textContent || '';
+                    const pubDate = item.querySelector('pubDate')?.textContent || 
+                                   item.querySelector('published')?.textContent || 
+                                   item.querySelector('updated')?.textContent || '';
+                    
+                    // Clean HTML tags from description
+                    const tempDiv = document.createElement('div');
+                    tempDiv.innerHTML = description;
+                    const cleanDescription = tempDiv.textContent || tempDiv.innerText || '';
+                    
+                    feedData.items.push({
+                        title: title,
+                        link: link,
+                        description: cleanDescription.substring(0, 300) + '...',
+                        pubDate: pubDate
+                    });
+                });
+
+                currentFeed = feedData;
+                displayFeed(feedData);
+
+            } catch (error) {
+                console.error('Error loading feed:', error);
+                feedContent.innerHTML = `
+                    <div class="error-message">
+                        <p>❌ Error loading feed</p>
+                        <p style="font-size: 0.9em; margin-top: 10px;">${error.message}</p>
+                        <p style="font-size: 0.8em; margin-top: 10px; color: #666;">Try refreshing or selecting a different source</p>
+                    </div>
+                `;
+            }
         }
-    }
 
-    // ---------- પેજ લોડ થાય એટલે ----------
-    window.addEventListener("DOMContentLoaded", () => {
-        loadFacebookPagePlugin();   // Facebook Page Plugin લાવો
-        fetchBloggerPosts();        // Blogger પોસ્ટ્સ લાવો
-        updateTimestamp();
-        // 2 કલાકે રિફ્રેશ (7200000 ms)
-        setInterval(refreshAll, 7200000);
-    });
-</script>
+        // Translate text using Google Translate API (unofficial)
+        async function translateToGujarati(text) {
+            if (!text || !autoTranslate) return text;
+            
+            try {
+                // Using Google Translate unofficial API
+                const response = await fetch(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=gu&dt=t&q=${encodeURIComponent(text)}`);
+                const data = await response.json();
+                
+                if (data && data[0] && data[0][0] && data[0][0][0]) {
+                    return data[0][0][0];
+                }
+                return text;
+            } catch (error) {
+                console.error('Translation error:', error);
+                return text;
+            }
+        }
+
+        // Display feed items
+        async function displayFeed(feedData) {
+            const feedContent = document.getElementById('feedContent');
+            
+            // Show only first 12 items
+            const items = feedData.items.slice(0, 12);
+            
+            // Create feed cards HTML
+            let html = '<div class="feed-container">';
+            
+            for (const item of items) {
+                let title = item.title;
+                let description = item.description;
+                
+                if (autoTranslate) {
+                    title = await translateToGujarati(title);
+                    description = await translateToGujarati(description);
+                }
+                
+                const date = item.pubDate ? new Date(item.pubDate).toLocaleDateString('gu-IN', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                }) : '';
+                
+                html += `
+                    <div class="feed-card">
+                        <div class="feed-source">
+                            ${feedData.title}
+                            ${autoTranslate ? '<span class="translate-indicator">અનુવાદિત</span>' : ''}
+                        </div>
+                        <div class="feed-title">${title}</div>
+                        <div class="feed-content">${description}</div>
+                        ${date ? `<div class="feed-date">📅 ${date}</div>` : ''}
+                        <a href="${item.link}" target="_blank" class="feed-link">
+                            ${autoTranslate ? 'વધુ વાંચો' : 'Read More'} →
+                        </a>
+                    </div>
+                `;
+            }
+            
+            html += '</div>';
+            feedContent.innerHTML = html;
+        }
+
+        // Initial load
+        loadFeed();
+
+        // Reload feed when source changes
+        document.getElementById('feedSource').addEventListener('change', loadFeed);
+    </script>
 </body>
 </html>
