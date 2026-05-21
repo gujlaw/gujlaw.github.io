@@ -1,629 +1,264 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="gu">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>GujLaw • Auto Legal News India | Live Updates</title>
-  <!-- Google Fonts + Font Awesome -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      font-family: 'Inter', sans-serif;
-      background: #f8fafc;
-      color: #0f172a;
-      line-height: 1.45;
-    }
-
-    ::-webkit-scrollbar { width: 8px; }
-    ::-webkit-scrollbar-track { background: #e2e8f0; border-radius: 10px; }
-    ::-webkit-scrollbar-thumb { background: #8b5cf6; border-radius: 10px; }
-
-    .container {
-      max-width: 1280px;
-      margin: 0 auto;
-      padding: 0 24px;
-    }
-
-    /* header */
-    .navbar {
-      background: linear-gradient(135deg, #0b1120 0%, #1e293b 100%);
-      padding: 1rem 0;
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      box-shadow: 0 12px 24px -12px rgba(0,0,0,0.2);
-    }
-    .nav-flex {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 1rem;
-    }
-    .logo-area {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-    .logo-icon {
-      font-size: 2rem;
-      color: #c084fc;
-    }
-    .logo-text h1 {
-      font-size: 1.8rem;
-      font-weight: 800;
-      background: linear-gradient(135deg, #e0e7ff, #c4b5fd);
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-    }
-    .logo-text p {
-      font-size: 0.7rem;
-      color: #94a3b8;
-      letter-spacing: 0.5px;
-    }
-    .live-badge {
-      background: #10b98120;
-      border: 1px solid #10b98160;
-      border-radius: 100px;
-      padding: 6px 14px;
-      font-size: 0.75rem;
-      font-weight: 600;
-      color: #34d399;
-    }
-    .live-badge i {
-      font-size: 0.7rem;
-      animation: pulse 1.5s infinite;
-    }
-    @keyframes pulse { 0% { opacity: 0.4; } 100% { opacity: 1; } }
-
-    /* filter chips */
-    .filter-section {
-      background: white;
-      margin: 2rem 0 1.5rem 0;
-      border-radius: 60px;
-      padding: 0.6rem;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.03);
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 0.5rem;
-      border: 1px solid #eef2ff;
-    }
-    .filter-btn {
-      background: transparent;
-      border: none;
-      padding: 0.65rem 1.4rem;
-      font-weight: 600;
-      font-size: 0.85rem;
-      border-radius: 40px;
-      cursor: pointer;
-      transition: all 0.2s;
-      color: #1e293b;
-      font-family: 'Inter', sans-serif;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .filter-btn.active {
-      background: #4f46e5;
-      color: white;
-      box-shadow: 0 6px 14px #4f46e530;
-    }
-    .filter-btn:hover:not(.active) {
-      background: #eef2ff;
-    }
-
-    /* stats row with auto-save info */
-    .stats-row {
-      display: flex;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      background: #ffffffdd;
-      backdrop-filter: blur(4px);
-      border-radius: 28px;
-      padding: 0.9rem 1.8rem;
-      margin-bottom: 2rem;
-      border: 1px solid #e2e8f0;
-    }
-    .stat-card {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-weight: 500;
-    }
-    .stat-number {
-      font-weight: 800;
-      font-size: 1.5rem;
-      color: #4f46e5;
-    }
-    .auto-save-indicator {
-      background: #ecfdf5;
-      border-radius: 40px;
-      padding: 4px 12px;
-      font-size: 0.7rem;
-      color: #059669;
-    }
-
-    /* news grid */
-    .news-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-      gap: 1.8rem;
-      margin: 2rem 0 3rem;
-    }
-    .news-card {
-      background: white;
-      border-radius: 28px;
-      overflow: hidden;
-      transition: transform 0.25s ease, box-shadow 0.25s;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.05);
-      border: 1px solid #edf2f7;
-      display: flex;
-      flex-direction: column;
-    }
-    .news-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 24px 36px -14px rgba(79,70,229,0.2);
-      border-color: #c7d2fe;
-    }
-    .card-badge {
-      width: fit-content;
-      margin: 1rem 1rem 0 1rem;
-      background: #eef2ff;
-      padding: 0.2rem 1rem;
-      border-radius: 40px;
-      font-size: 0.7rem;
-      font-weight: 700;
-      color: #4338ca;
-      text-transform: uppercase;
-    }
-    .card-content {
-      padding: 0.5rem 1.4rem 1.4rem 1.4rem;
-      flex: 1;
-    }
-    .news-title {
-      font-size: 1.2rem;
-      font-weight: 700;
-      line-height: 1.35;
-      margin: 0.5rem 0 0.7rem 0;
-      color: #0f172a;
-    }
-    .news-desc {
-      color: #334155;
-      font-size: 0.9rem;
-      margin-bottom: 1.2rem;
-      line-height: 1.45;
-    }
-    .card-meta {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-top: 1px solid #eef2ff;
-      padding-top: 1rem;
-      font-size: 0.7rem;
-      color: #5b6e8c;
-    }
-    .read-more {
-      background: none;
-      border: none;
-      color: #4f46e5;
-      font-weight: 600;
-      font-size: 0.75rem;
-      cursor: pointer;
-    }
-
-    /* modal */
-    .modal {
-      display: none;
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background-color: rgba(15, 23, 42, 0.9);
-      backdrop-filter: blur(8px);
-      align-items: center;
-      justify-content: center;
-      z-index: 1000;
-    }
-    .modal-card {
-      background: white;
-      max-width: 620px;
-      width: 90%;
-      border-radius: 36px;
-      padding: 2rem;
-      position: relative;
-      max-height: 85vh;
-      overflow-y: auto;
-    }
-    .modal-close {
-      position: absolute;
-      top: 1.2rem;
-      right: 1.5rem;
-      font-size: 1.5rem;
-      cursor: pointer;
-      color: #64748b;
-    }
-    .modal-title {
-      font-size: 1.5rem;
-      font-weight: 800;
-      margin-bottom: 1rem;
-      padding-right: 2rem;
-    }
-    .btn-close-modal {
-      margin-top: 1.8rem;
-      background: #4f46e5;
-      color: white;
-      border: none;
-      padding: 0.6rem 1.6rem;
-      border-radius: 60px;
-      font-weight: 600;
-      cursor: pointer;
-    }
-
-    footer {
-      background: #0f172a;
-      color: #cbd5e1;
-      padding: 2rem 0;
-      margin-top: 2rem;
-      border-radius: 28px 28px 0 0;
-    }
-
-    @media (max-width: 720px) {
-      .container { padding: 0 18px; }
-      .filter-section { overflow-x: auto; flex-wrap: nowrap; justify-content: flex-start; }
-      .filter-btn { white-space: nowrap; padding: 0.5rem 1rem; }
-      .news-grid { grid-template-columns: 1fr; }
-      .stats-row { flex-direction: column; gap: 0.7rem; }
-    }
-
-    .loader-placeholder {
-      text-align: center;
-      padding: 3rem;
-      color: #4f46e5;
-    }
-    .error-placeholder {
-      text-align: center;
-      padding: 2rem;
-      background: #fee2e2;
-      border-radius: 32px;
-      color: #991b1b;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GujLaw - સ્વચાલિત કાનૂની અપડેટ્સ</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #eef2f5;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1300px;
+            margin: auto;
+            background: white;
+            border-radius: 24px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        header {
+            background: linear-gradient(135deg, #0b3b5f, #1e5a7a);
+            color: white;
+            padding: 1.5rem 2rem;
+        }
+        header h1 {
+            font-size: 2rem;
+        }
+        .update-badge {
+            display: inline-block;
+            background: #e67e22;
+            padding: 5px 12px;
+            border-radius: 40px;
+            font-size: 0.8rem;
+            margin-top: 10px;
+        }
+        .main-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            padding: 2rem;
+        }
+        .col {
+            flex: 1;
+            min-width: 300px;
+            background: #ffffff;
+            border-radius: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            padding: 1.2rem;
+            transition: 0.2s;
+        }
+        .col h2 {
+            color: #0b3b5f;
+            border-left: 5px solid #e67e22;
+            padding-left: 15px;
+            margin-bottom: 1.5rem;
+            font-size: 1.6rem;
+        }
+        .card {
+            background: #fefaf2;
+            border-radius: 16px;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid #e67e22;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            transition: 0.2s;
+        }
+        .card h3 {
+            color: #1e466e;
+            margin-bottom: 0.5rem;
+        }
+        .date {
+            font-size: 0.75rem;
+            color: #e67e22;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        .content-preview {
+            color: #2d3e50;
+            line-height: 1.5;
+            margin-bottom: 10px;
+        }
+        .read-more {
+            color: #e67e22;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .fb-plugin-container {
+            background: #f0f2f5;
+            border-radius: 16px;
+            padding: 10px;
+            max-height: 600px;
+            overflow-y: auto;
+        }
+        .loader {
+            text-align: center;
+            padding: 30px;
+            color: #0984e3;
+        }
+        footer {
+            background: #0b3b5f;
+            color: white;
+            text-align: center;
+            padding: 1rem;
+            font-size: 0.85rem;
+        }
+        @media (max-width: 800px) {
+            .main-grid {
+                flex-direction: column;
+            }
+        }
+    </style>
 </head>
 <body>
 
-<nav class="navbar">
-  <div class="container nav-flex">
-    <div class="logo-area">
-      <div class="logo-icon"><i class="fas fa-gavel"></i></div>
-      <div class="logo-text">
-        <h1>GujLaw</h1>
-        <p>Auto Legal News • India</p>
-      </div>
+<div class="container">
+    <header>
+        <h1>🇮🇳 GujLaw · ગુજરાત કાનૂની અપડેટ્સ</h1>
+        <p>📡 Facebook પેજ + Blogger પોસ્ટ્સ હમણાંની સાથે આપમેળે અપડેટ થાય છે</p>
+        <div class="update-badge">🔄 છેલ્લું અપડેટ: <span id="lastUpdated">--</span></div>
+    </header>
+
+    <div class="main-grid">
+        <!-- કૉલમ 1: Blogger પોસ્ટ્સ (API વડે) -->
+        <div class="col">
+            <h2>📘 Blogger · નવીનતમ પોસ્ટ્સ</h2>
+            <div id="bloggerPostsContainer">
+                <div class="loader">⏳ Blogger પોસ્ટ્સ લાવી રહ્યા છીએ...</div>
+            </div>
+        </div>
+
+        <!-- કૉલમ 2: Facebook પેજની પોસ્ટ્સ (Plugin - No Token Need) -->
+        <div class="col">
+            <h2>📘 Facebook · gujlaw પેજની પોસ્ટ્સ</h2>
+            <div id="fb-root"></div>
+            <div class="fb-plugin-container" id="facebookPluginBox">
+                <div class="loader">📱 Facebook પ્લગિન લોડ થઈ રહ્યું છે...</div>
+            </div>
+            <p style="font-size:12px; margin-top:10px;">✅ Facebook પેજની જાહેર પોસ્ટ્સ સીધી અહીં દેખાશે.</p>
+        </div>
     </div>
-    <div class="live-badge"><i class="fas fa-sync-alt"></i> LIVE AUTO-UPDATES</div>
-  </div>
-</nav>
 
-<main class="container">
-  <div class="filter-section" id="filterContainer">
-    <button class="filter-btn active" data-filter="all"><i class="fas fa-newspaper"></i> સર્વ</button>
-    <button class="filter-btn" data-filter="supreme court"><i class="fas fa-landmark"></i> Supreme Court</button>
-    <button class="filter-btn" data-filter="high court"><i class="fas fa-building"></i> High Court</button>
-    <button class="filter-btn" data-filter="judgment"><i class="fas fa-scroll"></i> Landmark Judgment</button>
-    <button class="filter-btn" data-filter="policy"><i class="fas fa-file-alt"></i> Legal Policy</button>
-    <button class="filter-btn" data-filter="tribunal"><i class="fas fa-users"></i> Tribunal / NCLAT</button>
-  </div>
+    <!-- તમારા હાલના મેન્યુઅલ અપડેટ્સ જેવા કે Supreme Court, High Court વિભાગ અહીં ઉમેરી શકો છો -->
+    <div style="padding: 0 2rem 2rem 2rem;">
+        <h2 style="color:#0b3b5f;">⚖️ વિશેષ કાનૂની અપડેટ્સ (GujLaw Archive)</h2>
+        <div style="display:flex; flex-wrap:wrap; gap:1rem; margin-top:1rem;">
+            <div style="background:#eef2fa; padding:1rem; border-radius:16px; flex:1;">📌 Supreme Court: નવા ફौजदારી કાયદા 1 જુલાઈથી લાગુ</div>
+            <div style="background:#eef2fa; padding:1rem; border-radius:16px; flex:1;">📌 Gujarat HC: કોન્ટ્રાક્ટ ફાર્મિંગ પર ઐતિહાસિક ચુકાદો</div>
+            <div style="background:#eef2fa; padding:1rem; border-radius:16px; flex:1;">📌 NCLAT: રિયલ્ટર સામે દેવાળિયા રોકાયા</div>
+        </div>
+    </div>
 
-  <div class="stats-row">
-    <div class="stat-card"><i class="fas fa-database"></i> <span class="stat-number" id="totalNewsCount">0</span> <span>કાનૂની અપડેટ્સ</span></div>
-    <div class="stat-card"><i class="fas fa-clock"></i> <span id="lastAutoTime">—</span> <span>છેલ્લું ઓટો સેવ</span></div>
-    <div class="auto-save-indicator"><i class="fas fa-check-circle"></i> Auto-save enabled (local storage)</div>
-  </div>
-
-  <div id="newsGridContainer" class="news-grid">
-    <div class="loader-placeholder"><i class="fas fa-spinner fa-pulse"></i> Loading latest legal news from India...</div>
-  </div>
-</main>
-
-<footer class="footer">
-  <div class="container" style="text-align: center; display: flex; justify-content: space-between; flex-wrap: wrap;">
-    <div>© 2025 GujLaw — AI-powered legal news tracker. RSS source: LiveLaw India</div>
-    <div style="margin-top: 8px;"><i class="fas fa-save"></i> Automatic cached • always offline-ready</div>
-  </div>
-</footer>
-
-<div id="newsModal" class="modal">
-  <div class="modal-card">
-    <i class="fas fa-times modal-close" id="closeModalBtn"></i>
-    <div class="modal-title" id="modalTitle"></div>
-    <div class="modal-body" id="modalBody"></div>
-    <button class="btn-close-modal" id="modalCloseFooter">Close</button>
-  </div>
+    <footer>
+        © 2025 GujLaw · કાનૂની માહિતી માટે સત્તાવાર સ્ત્રોત તપાસો · ઓટો-અપડેટ દર 2 કલાકે
+    </footer>
 </div>
 
+<!-- Facebook SDK (પ્લગિન માટે જરૂરી) -->
+<script async defer crossorigin="anonymous" src="https://connect.facebook.net/gu_IN/sdk.js#xfbml=1&version=v18.0"></script>
+
 <script>
-  // --------------------------------------------------------------
-  // COMPLETE AUTO LEGAL NEWS SYSTEM (RSS fetch + cache + auto-save)
-  // --------------------------------------------------------------
-  const STORAGE_KEY = 'gujlaw_legal_news_v2';
-  const LAST_UPDATE_KEY = 'gujlaw_last_fetch';
-  const RSS_PROXY = 'https://api.rss2json.com/v1/api.json?rss_url=https://www.livelaw.in/rss';
-  // fallback static news in case fetch fails (base legal dataset, but will be overridden by RSS on success)
-  const FALLBACK_NEWS = [
-    { id: "fb1", title: "Supreme Court: New criminal laws implementation timeline", description: "BNSS and BNS rollout monitored by SC bench. Key changes for legal fraternity.", category: "policy", link: "#", pubDate: new Date().toISOString(), fullContent: "Supreme Court issues guidelines for transition to new criminal codes. All high courts directed to complete training by July 2025." },
-    { id: "fb2", title: "Gujarat High Court: Landmark verdict on contract farming", description: "HC upholds farmers' rights, strikes down restrictive clauses.", category: "high court", link: "#", pubDate: new Date().toISOString(), fullContent: "High court ruled that contract farming agreements must not exploit small farmers; state to frame new rules." },
-    { id: "fb3", title: "NCLAT stays insolvency against major realtor", description: "Tribunal grants relief, asks for settlement within 60 days.", category: "tribunal", link: "#", pubDate: new Date().toISOString(), fullContent: "NCLAT observed that the matter requires further mediation, giving breather to real estate developer." }
-  ];
+    // ============== કૃપા કરીને તમારી Blogger વિગતો અહીં મૂકો ==============
+    const BLOGGER_API_KEY = "તમારી_API_કી";      // Blogger API key (Google Cloud Console)
+    const BLOG_ID = "તમારો_બ્લોગ_ID";            // Blogger blog ID
+    // ===================================================================
 
-  let currentNews = [];          // full news array (from cache or fresh)
-  let activeFilter = "all";
-
-  // Helper: extract category from title + description
-  function categorizeLegalNews(title, description) {
-    const text = (title + " " + description).toLowerCase();
-    if (text.includes("supreme court") || text.includes("sc ") || text.includes("apex court")) return "supreme court";
-    if (text.includes("high court") || text.includes("bombay hc") || text.includes("delhi hc") || text.includes("kerala hc") || text.includes("calcutta hc") || text.includes("gujarat hc")) return "high court";
-    if (text.includes("judgment") || text.includes("verdict") || text.includes("landmark") || text.includes("ruling")) return "judgment";
-    if (text.includes("policy") || text.includes("bill") || text.includes("act") || text.includes("amendment") || text.includes("law commission") || text.includes("regulation")) return "policy";
-    if (text.includes("tribunal") || text.includes("nclat") || text.includes("nclt") || text.includes("cat") || text.includes("competition commission")) return "tribunal";
-    return "all";
-  }
-
-  // clean HTML from description
-  function cleanDescription(html) {
-    if (!html) return "";
-    let stripped = html.replace(/<[^>]*>/g, '');
-    stripped = stripped.replace(/\s+/g, ' ').trim();
-    if (stripped.length > 280) stripped = stripped.substring(0, 277) + "...";
-    return stripped;
-  }
-
-  // generate unique id from link
-  function generateNewsId(link) {
-    if (!link) return "news_" + Date.now() + "_" + Math.random().toString(36).substr(2, 6);
-    return "id_" + btoa(link).replace(/[^a-zA-Z0-9]/g, '').substring(0, 24);
-  }
-
-  // fetch from LiveLaw RSS and auto-save to localStorage
-  async function fetchAutoLegalNews() {
-    try {
-      const response = await fetch(RSS_PROXY);
-      if (!response.ok) throw new Error("RSS fetch failed");
-      const data = await response.json();
-      
-      if (data && data.items && data.items.length > 0) {
-        const fetchedNews = data.items.map(item => {
-          const cleanDesc = cleanDescription(item.description || item.content || "");
-          const category = categorizeLegalNews(item.title, cleanDesc);
-          const pubDateRaw = item.pubDate ? new Date(item.pubDate) : new Date();
-          return {
-            id: generateNewsId(item.link),
-            title: item.title || "Legal Update",
-            description: cleanDesc,
-            fullContent: (item.description || item.content || "").replace(/<[^>]*>/g, '') + " — Source: LiveLaw India. (Auto-fetched legal news)",
-            link: item.link || "#",
-            pubDate: pubDateRaw.toISOString(),
-            category: category,
-            source: "LiveLaw RSS"
-          };
-        });
-        
-        // remove duplicates based on id
-        const uniqueNews = [];
-        const ids = new Set();
-        for (const n of fetchedNews) {
-          if (!ids.has(n.id)) {
-            ids.add(n.id);
-            uniqueNews.push(n);
-          }
-        }
-        
-        if (uniqueNews.length > 0) {
-          // update global news array
-          currentNews = uniqueNews;
-          // AUTO-SAVE to localStorage
-          localStorage.setItem(STORAGE_KEY, JSON.stringify(currentNews));
-          localStorage.setItem(LAST_UPDATE_KEY, new Date().toISOString());
-          updateLastAutoTime(new Date());
-          renderNewsGrid();
-          console.log(`✅ Auto-saved ${currentNews.length} legal updates at ${new Date().toLocaleTimeString()}`);
-          return true;
-        } else {
-          throw new Error("No items in RSS");
-        }
-      } else {
-        throw new Error("Empty RSS feed");
-      }
-    } catch (error) {
-      console.warn("RSS fetch error, using cached or fallback", error);
-      // AUTO-SAVE fallback: load from cache if exists
-      const cached = localStorage.getItem(STORAGE_KEY);
-      if (cached) {
-        try {
-          currentNews = JSON.parse(cached);
-          renderNewsGrid();
-          updateLastAutoTimeFromCache();
-          console.log("📀 Loaded from auto-saved cache");
-          return true;
-        } catch(e) {}
-      } else {
-        // final fallback: use static + save
-        currentNews = [...FALLBACK_NEWS];
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(currentNews));
-        localStorage.setItem(LAST_UPDATE_KEY, new Date().toISOString());
-        renderNewsGrid();
-        updateLastAutoTime(new Date());
-      }
-      return false;
-    }
-  }
-
-  function updateLastAutoTime(date) {
-    const timeElem = document.getElementById('lastAutoTime');
-    if (timeElem) {
-      timeElem.innerText = date.toLocaleTimeString('en-IN', { hour: '2-digit', minute:'2-digit' });
-    }
-  }
-
-  function updateLastAutoTimeFromCache() {
-    const savedTime = localStorage.getItem(LAST_UPDATE_KEY);
-    if (savedTime) {
-      const d = new Date(savedTime);
-      if (!isNaN(d.getTime())) updateLastAutoTime(d);
-      else updateLastAutoTime(new Date());
-    } else {
-      updateLastAutoTime(new Date());
-    }
-  }
-
-  // render news grid based on activeFilter
-  function renderNewsGrid() {
-    const container = document.getElementById('newsGridContainer');
-    if (!container) return;
-
-    let filtered = currentNews;
-    if (activeFilter !== "all") {
-      filtered = currentNews.filter(item => item.category === activeFilter);
-    }
-    
-    const totalSpan = document.getElementById('totalNewsCount');
-    if (totalSpan) totalSpan.innerText = filtered.length;
-
-    if (!filtered.length) {
-      container.innerHTML = `<div class="error-placeholder"><i class="fas fa-newspaper"></i> No legal updates in this category. Try 'સર્વ' or check later.<br> 🇮🇳 GujLaw auto-refreshes every 30 minutes.</div>`;
-      return;
-    }
-
-    const cardsHTML = filtered.map(news => {
-      const displayDate = news.pubDate ? new Date(news.pubDate).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' }) : "Latest";
-      const categoryIcon = getCategoryIcon(news.category);
-      return `
-        <div class="news-card" data-id="${news.id}">
-          <div class="card-badge"><i class="fas ${categoryIcon}"></i> ${news.category.toUpperCase()}</div>
-          <div class="card-content">
-            <div class="news-title">${escapeHtml(news.title)}</div>
-            <div class="news-desc">${escapeHtml(news.description.substring(0, 200))}</div>
-            <div class="card-meta">
-              <div><i class="far fa-calendar-alt"></i> ${displayDate}</div>
-              <button class="read-more" data-id="${news.id}"><i class="fas fa-arrow-right"></i> વિગત</button>
+    // ---------- Facebook Page Plugin ને dynamically દાખલ કરવું ----------
+    function loadFacebookPagePlugin() {
+        const container = document.getElementById("facebookPluginBox");
+        if(!container) return;
+        // Facebook પેજ પ્લગિન - "gujlaw" પેજ ID અથવા username
+        const pageUrl = "https://www.facebook.com/gujlaw";  // તમારું FB પેજ
+        container.innerHTML = `
+            <div class="fb-page" 
+                data-href="${pageUrl}"
+                data-tabs="timeline"
+                data-width="500"
+                data-height="550"
+                data-small-header="false"
+                data-adapt-container-width="true"
+                data-hide-cover="false"
+                data-show-facepile="true">
             </div>
-          </div>
-        </div>
-      `;
-    }).join("");
-    
-    container.innerHTML = cardsHTML;
-    // attach modal events
-    document.querySelectorAll('.read-more').forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        const id = btn.getAttribute('data-id');
-        const newsItem = currentNews.find(n => n.id === id);
-        if (newsItem) openModal(newsItem);
-      });
-    });
-  }
-
-  function getCategoryIcon(cat) {
-    switch(cat) {
-      case 'supreme court': return 'fa-landmark';
-      case 'high court': return 'fa-building';
-      case 'judgment': return 'fa-gavel';
-      case 'policy': return 'fa-file-alt';
-      case 'tribunal': return 'fa-users';
-      default: return 'fa-newspaper';
+        `;
+        // ફરીથી FB SDK ને પ્લગિન પાર્સ કરવા માટે (જો SDK પહેલેથી લોડ હોય)
+        if (typeof FB !== 'undefined') {
+            FB.XFBML.parse(container);
+        }
     }
-  }
 
-  function escapeHtml(str) {
-    if (!str) return "";
-    return str.replace(/[&<>]/g, function(m) {
-      if (m === '&') return '&amp;';
-      if (m === '<') return '&lt;';
-      if (m === '>') return '&gt;';
-      return m;
-    });
-  }
-
-  // Modal logic
-  const modal = document.getElementById("newsModal");
-  const modalTitle = document.getElementById("modalTitle");
-  const modalBodyElem = document.getElementById("modalBody");
-
-  function openModal(news) {
-    modalTitle.innerText = news.title;
-    const fullText = `<div style="margin-bottom: 12px; display: flex; gap: 12px; flex-wrap: wrap;"><span><i class="fas fa-tag"></i> <strong>${news.category.toUpperCase()}</strong></span> <span><i class="far fa-calendar"></i> ${news.pubDate ? new Date(news.pubDate).toLocaleDateString('en-IN', {year:'numeric', month:'long', day:'numeric'}) : "Recent"}</span></div><hr/><p style="margin-top: 1rem; line-height:1.5;">${escapeHtml(news.fullContent || news.description)}</p><br/><div style="background:#f1f5f9; padding: 12px; border-radius: 24px;"><i class="fas fa-sync-alt"></i> Auto-fetched via LiveLaw RSS • GujLaw AutoSave active</div>`;
-    modalBodyElem.innerHTML = fullText;
-    modal.style.display = "flex";
-    document.body.style.overflow = "hidden";
-  }
-
-  function closeModal() {
-    modal.style.display = "none";
-    document.body.style.overflow = "";
-  }
-
-  // filter event listeners
-  function setupFilters() {
-    const btns = document.querySelectorAll(".filter-btn");
-    btns.forEach(btn => {
-      btn.addEventListener("click", () => {
-        const filterVal = btn.getAttribute("data-filter");
-        activeFilter = filterVal;
-        btns.forEach(b => b.classList.remove("active"));
-        btn.classList.add("active");
-        renderNewsGrid();
-      });
-    });
-  }
-
-  // auto-refresh every 30 minutes (fetch fresh from RSS + auto-save)
-  let autoRefreshInterval;
-  function startAutoRefresh() {
-    if (autoRefreshInterval) clearInterval(autoRefreshInterval);
-    autoRefreshInterval = setInterval(() => {
-      fetchAutoLegalNews();
-    }, 30 * 60 * 1000); // 30 minutes
-  }
-
-  // initial load: load from localStorage first (instant), then fetch fresh in background
-  function bootstrap() {
-    const cachedNewsRaw = localStorage.getItem(STORAGE_KEY);
-    if (cachedNewsRaw) {
-      try {
-        currentNews = JSON.parse(cachedNewsRaw);
-        renderNewsGrid();
-        updateLastAutoTimeFromCache();
-      } catch(e) {}
-    } else {
-      // first time - show fallback but will fetch soon
-      currentNews = [...FALLBACK_NEWS];
-      renderNewsGrid();
-      updateLastAutoTime(new Date());
+    // ---------- Blogger API વડે પોસ્ટ્સ લાવવી ----------
+    async function fetchBloggerPosts() {
+        const container = document.getElementById("bloggerPostsContainer");
+        if (!BLOGGER_API_KEY || BLOGGER_API_KEY === "તમારી_API_કી" || !BLOG_ID || BLOG_ID === "તમારો_બ્લોગ_ID") {
+            container.innerHTML = `<div class="card"><strong>⚠️ Blogger API key / Blog ID સેટ કરો.</strong><br>Google Cloud Console માંથી Blogger API enable કરીને key મેળવો.</div>
+                                    <div class="card"><strong>📢 નમૂનારૂપ પોસ્ટ્સ:</strong><br>• Supreme Court: નવા ક્રિમિનલ લો અમલીકરણ<br>• Gujarat HC: રિયલ એસ્ટેટ મોડલ કોડમાં સુધારો</div>`;
+            return;
+        }
+        const url = `https://www.googleapis.com/blogger/v3/blogs/${BLOG_ID}/posts?key=${BLOGGER_API_KEY}&maxResults=5`;
+        try {
+            const response = await fetch(url);
+            const data = await response.json();
+            if (data.items && data.items.length > 0) {
+                renderBloggerPosts(data.items);
+            } else {
+                container.innerHTML = "<div class='card'>કોઈ બ્લોગર પોસ્ટ નથી અથવા API ઍક્સેસ નથી</div>";
+            }
+        } catch (error) {
+            console.error("Blogger API error:", error);
+            container.innerHTML = "<div class='card'>Blogger API ઍક્સેસમાં સમસ્યા, પછી પ્રયત્ન કરો.</div>";
+        }
     }
-    // background fetch and auto-save new data
-    fetchAutoLegalNews().then(() => {
-      // after fresh fetch, grid re-renders automatically 
-      if(currentNews.length) renderNewsGrid();
-    });
-    startAutoRefresh();
-    setupFilters();
-  }
 
-  // attach modal close events
-  document.getElementById("closeModalBtn")?.addEventListener("click", closeModal);
-  document.getElementById("modalCloseFooter")?.addEventListener("click", closeModal);
-  window.addEventListener("click", (e) => { if (e.target === modal) closeModal(); });
-  
-  // start everything
-  bootstrap();
+    function renderBloggerPosts(posts) {
+        const container = document.getElementById("bloggerPostsContainer");
+        container.innerHTML = "";
+        posts.forEach(post => {
+            const card = document.createElement("div");
+            card.className = "card";
+            const title = post.title || "શીર્ષક વગર";
+            const publishedDate = new Date(post.published).toLocaleString("gu-IN", {day:'numeric', month:'short', year:'numeric'});
+            let plainContent = post.content ? post.content.replace(/<[^>]*>/g, ' ').substring(0, 180) : post.description || "";
+            card.innerHTML = `
+                <h3>📄 ${title}</h3>
+                <div class="date">📅 ${publishedDate}</div>
+                <div class="content-preview">${plainContent}...</div>
+                <a href="${post.url}" target="_blank" class="read-more">સંપૂર્ણ વાંચો →</a>
+            `;
+            container.appendChild(card);
+        });
+    }
+
+    // ---------- ટાઈમસ્ટેમ્પ અપડેટ ----------
+    function updateTimestamp() {
+        const now = new Date();
+        document.getElementById("lastUpdated").innerHTML = now.toLocaleString("gu-IN");
+    }
+
+    // ---------- ઓટો રિફ્રેશ (દર 2 કલાકે) ----------
+    function refreshAll() {
+        fetchBloggerPosts();
+        updateTimestamp();
+        // Facebook plugin automatically shows latest posts, no need to re-parse unless you want
+        if (typeof FB !== 'undefined') {
+            FB.XFBML.parse();
+        }
+    }
+
+    // ---------- પેજ લોડ થાય એટલે ----------
+    window.addEventListener("DOMContentLoaded", () => {
+        loadFacebookPagePlugin();   // Facebook Page Plugin લાવો
+        fetchBloggerPosts();        // Blogger પોસ્ટ્સ લાવો
+        updateTimestamp();
+        // 2 કલાકે રિફ્રેશ (7200000 ms)
+        setInterval(refreshAll, 7200000);
+    });
 </script>
 </body>
 </html>
