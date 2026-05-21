@@ -1,0 +1,662 @@
+Here is a complete, ready-to-run HTML document that creates a modern, responsive legal news website for India, featuring category filtering, a news card layout, and mobile-friendly navigation.
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>GujLaw • India's Legal News Pulse</title>
+  <!-- Google Fonts + Font Awesome -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #fafcfd;
+      color: #1a2a3f;
+      line-height: 1.45;
+      scroll-behavior: smooth;
+    }
+
+    /* custom scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #e9ecef;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #8b5cf6;
+      border-radius: 12px;
+    }
+
+    /* container system */
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* header / nav */
+    .navbar {
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+      padding: 1rem 0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1);
+      backdrop-filter: blur(2px);
+    }
+    .nav-flex {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .logo-area {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .logo-icon {
+      font-size: 2rem;
+      color: #c084fc;
+    }
+    .logo-text h1 {
+      font-size: 1.75rem;
+      font-weight: 800;
+      letter-spacing: -0.3px;
+      background: linear-gradient(135deg, #e0e7ff, #c4b5fd);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .logo-text p {
+      font-size: 0.7rem;
+      color: #94a3b8;
+      letter-spacing: 0.5px;
+    }
+    .tagline {
+      color: #cbd5e1;
+      font-size: 0.85rem;
+      background: #33415570;
+      padding: 6px 14px;
+      border-radius: 40px;
+      backdrop-filter: blur(4px);
+    }
+
+    /* category filter bar */
+    .filter-section {
+      background: white;
+      margin: 2rem 0 1.5rem 0;
+      border-radius: 60px;
+      padding: 0.5rem;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.02), 0 2px 6px rgba(0,0,0,0.05);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.5rem;
+      border: 1px solid #eef2ff;
+    }
+    .filter-btn {
+      background: transparent;
+      border: none;
+      padding: 0.7rem 1.5rem;
+      font-weight: 600;
+      font-size: 0.9rem;
+      font-family: 'Inter', sans-serif;
+      border-radius: 40px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      color: #334155;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .filter-btn i {
+      font-size: 0.9rem;
+    }
+    .filter-btn.active {
+      background: #4f46e5;
+      color: white;
+      box-shadow: 0 4px 12px rgba(79,70,229,0.3);
+    }
+    .filter-btn:hover:not(.active) {
+      background: #eef2ff;
+      color: #1e293b;
+    }
+
+    /* stats highlight */
+    .stats-row {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      background: #ffffffcc;
+      backdrop-filter: blur(4px);
+      border-radius: 32px;
+      padding: 0.9rem 1.8rem;
+      margin-bottom: 2rem;
+      border: 1px solid #e2e8f0;
+    }
+    .stat-card {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 500;
+    }
+    .stat-number {
+      font-weight: 800;
+      font-size: 1.5rem;
+      color: #4f46e5;
+    }
+
+    /* grid news cards */
+    .news-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
+      gap: 1.8rem;
+      margin: 2rem 0 3rem;
+    }
+    .news-card {
+      background: white;
+      border-radius: 28px;
+      overflow: hidden;
+      transition: all 0.3s cubic-bezier(0.2, 0, 0, 1);
+      box-shadow: 0 12px 24px -12px rgba(0,0,0,0.08);
+      border: 1px solid #edf2f7;
+      display: flex;
+      flex-direction: column;
+    }
+    .news-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 24px 36px -14px rgba(79,70,229,0.2);
+      border-color: #c7d2fe;
+    }
+    .card-badge {
+      display: inline-block;
+      width: fit-content;
+      margin: 1rem 1rem 0 1rem;
+      background: #eef2ff;
+      padding: 0.2rem 1rem;
+      border-radius: 40px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: #4338ca;
+      letter-spacing: 0.3px;
+    }
+    .card-content {
+      padding: 0.5rem 1.4rem 1.4rem 1.4rem;
+      flex: 1;
+    }
+    .news-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      line-height: 1.35;
+      margin: 0.5rem 0 0.75rem 0;
+      color: #0f172a;
+    }
+    .news-desc {
+      color: #334155;
+      font-size: 0.9rem;
+      margin-bottom: 1.25rem;
+      line-height: 1.45;
+    }
+    .card-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid #eef2ff;
+      padding-top: 1rem;
+      margin-top: auto;
+      font-size: 0.75rem;
+      color: #5b6e8c;
+    }
+    .date-badge {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .read-more {
+      background: none;
+      border: none;
+      color: #4f46e5;
+      font-weight: 600;
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .read-more:hover {
+      color: #1e1b4b;
+      gap: 6px;
+    }
+
+    /* footer */
+    .footer {
+      background: #0f172a;
+      color: #cbd5e1;
+      padding: 2rem 0;
+      margin-top: 2rem;
+      border-radius: 32px 32px 0 0;
+    }
+    .footer-flex {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 2rem;
+      align-items: center;
+    }
+    .social-links i {
+      font-size: 1.3rem;
+      margin-left: 1rem;
+      color: #a5b4fc;
+      transition: 0.2s;
+    }
+    .social-links i:hover {
+      color: white;
+    }
+
+    /* modal for full news */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background-color: rgba(15, 23, 42, 0.85);
+      backdrop-filter: blur(8px);
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      padding: 1rem;
+    }
+    .modal-card {
+      background: white;
+      max-width: 650px;
+      width: 100%;
+      border-radius: 40px;
+      padding: 2rem;
+      position: relative;
+      animation: fadeUp 0.2s ease;
+      max-height: 85vh;
+      overflow-y: auto;
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px);}
+      to { opacity: 1; transform: translateY(0);}
+    }
+    .modal-close {
+      position: absolute;
+      top: 1.3rem;
+      right: 1.5rem;
+      font-size: 1.6rem;
+      cursor: pointer;
+      color: #64748b;
+    }
+    .modal-title {
+      font-size: 1.6rem;
+      font-weight: 800;
+      margin-bottom: 1rem;
+      padding-right: 2rem;
+    }
+    .modal-body {
+      color: #1e293b;
+      line-height: 1.6;
+    }
+    .btn-close-modal {
+      margin-top: 2rem;
+      background: #4f46e5;
+      color: white;
+      border: none;
+      padding: 0.7rem 1.8rem;
+      border-radius: 60px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    /* responsive touches */
+    @media (max-width: 720px) {
+      .container {
+        padding: 0 18px;
+      }
+      .filter-section {
+        border-radius: 30px;
+        overflow-x: auto;
+        flex-wrap: nowrap;
+        justify-content: flex-start;
+        padding: 0.5rem;
+        scrollbar-width: thin;
+      }
+      .filter-btn {
+        padding: 0.5rem 1rem;
+        font-size: 0.8rem;
+        white-space: nowrap;
+      }
+      .news-grid {
+        grid-template-columns: 1fr;
+        gap: 1.2rem;
+      }
+      .stats-row {
+        flex-direction: column;
+        gap: 0.8rem;
+        align-items: flex-start;
+      }
+      .logo-text h1 {
+        font-size: 1.3rem;
+      }
+    }
+    @media (min-width: 1400px) {
+      .container {
+        max-width: 1380px;
+      }
+    }
+
+    .loading-dots {
+      text-align: center;
+      padding: 3rem;
+      color: #4f46e5;
+      font-weight: 500;
+    }
+    .no-results {
+      text-align: center;
+      padding: 3rem;
+      background: white;
+      border-radius: 40px;
+      color: #475569;
+    }
+  </style>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="container nav-flex">
+    <div class="logo-area">
+      <div class="logo-icon"><i class="fas fa-gavel"></i></div>
+      <div class="logo-text">
+        <h1>GujLaw</h1>
+        <p>Legal News • India Updates</p>
+      </div>
+    </div>
+    <div class="tagline">
+      <i class="fas fa-balance-scale"></i>  Supreme Court | High Courts | Breaking
+    </div>
+  </div>
+</nav>
+
+<main class="container">
+  <!-- filter chips -->
+  <div class="filter-section" id="filterContainer">
+    <button class="filter-btn active" data-filter="all"><i class="fas fa-newspaper"></i> सभी समाचार</button>
+    <button class="filter-btn" data-filter="supreme court"><i class="fas fa-landmark"></i> Supreme Court</button>
+    <button class="filter-btn" data-filter="high court"><i class="fas fa-building"></i> High Court</button>
+    <button class="filter-btn" data-filter="judgment"><i class="fas fa-scroll"></i> Landmark Judgment</button>
+    <button class="filter-btn" data-filter="policy"><i class="fas fa-file-alt"></i> Legal Policy</button>
+    <button class="filter-btn" data-filter="tribunal"><i class="fas fa-users"></i> Tribunal / NCLAT</button>
+  </div>
+
+  <!-- stats row -->
+  <div class="stats-row">
+    <div class="stat-card"><i class="fas fa-calendar-week"></i> <span class="stat-number" id="totalNewsCount">0</span> <span>Latest Updates</span></div>
+    <div class="stat-card"><i class="fas fa-gavel"></i> <span class="stat-number" id="activeCategories">6</span> <span>Legal Areas</span></div>
+    <div class="stat-card"><i class="fas fa-chart-line"></i> <span>🇮🇳 India's #1 legal pulse</span></div>
+  </div>
+
+  <!-- dynamic news grid -->
+  <div id="newsGridContainer" class="news-grid"></div>
+</main>
+
+<footer class="footer">
+  <div class="container footer-flex">
+    <div>© 2025 GujLaw — Empowering legal awareness in India. All updates based on authoritative court sources.</div>
+    <div class="social-links">
+      <i class="fab fa-twitter"></i>
+      <i class="fab fa-linkedin-in"></i>
+      <i class="fab fa-github"></i>
+      <i class="fas fa-envelope"></i>
+    </div>
+  </div>
+</footer>
+
+<!-- modal structure -->
+<div id="newsModal" class="modal">
+  <div class="modal-card">
+    <i class="fas fa-times modal-close" id="closeModalBtn"></i>
+    <div class="modal-title" id="modalTitle"></div>
+    <div class="modal-body" id="modalBody"></div>
+    <button class="btn-close-modal" id="modalCloseFooter">Close</button>
+  </div>
+</div>
+
+<script>
+  // ---------- RICH LEGAL NEWS DATABASE (INDIA SPECIFIC, UNIQUE, UP-TO-DATE FEEL) ----------
+  const legalNewsData = [
+    {
+      id: 1,
+      title: "Supreme Court: 'No automatic arrest under GST offences', grants protection",
+      description: "Apex court holds that arrest under Section 69 of CGST Act cannot be mechanical; proper justification needed. Landmark ruling for businesses.",
+      category: "supreme court",
+      fullContent: "In a major relief to taxpayers, the Supreme Court ruled that arresting authorities must record reasons in writing before arresting any person under GST laws. The bench emphasized personal liberty under Article 21 and directed strict compliance with procedural safeguards. This judgment will impact thousands of pending GST cases across India.",
+      date: "18 May 2025",
+      icon: "gavel"
+    },
+    {
+      id: 2,
+      title: "Bombay HC strikes down IT rule on 'fact-check unit', calls it threat to free speech",
+      description: "High Court declares controversial IT Rules amendment unconstitutional, citing lack of statutory backing and chilling effect on digital media.",
+      category: "high court",
+      fullContent: "The Bombay High Court held that the proposed fact-check unit of the central government exceeded the scope of the IT Act. The court observed that the government cannot unilaterally decide what constitutes 'fake news' about its functioning without independent oversight. This verdict strengthens press freedom and digital rights.",
+      date: "15 May 2025",
+      icon: "building"
+    },
+    {
+      id: 3,
+      title: "Delhi HC: Maintenance amount for divorced Muslim woman under Section 125 CrPC",
+      description: "Landmark interpretation: Delhi HC upholds Muslim woman’s right to maintenance beyond iddat period under secular law.",
+      category: "judgment",
+      fullContent: "The Delhi High Court affirmed that a divorced Muslim woman can claim maintenance under Section 125 CrPC irrespective of the limit under the Muslim Women (Protection of Rights on Divorce) Act. The bench held that secular criminal procedure code overrides personal law in matters of destitution, ensuring gender justice.",
+      date: "10 May 2025",
+      icon: "scroll"
+    },
+    {
+      id: 4,
+      title: "New criminal laws (BNSS, BNS) implementation: SC issues monitoring guidelines",
+      description: "Supreme Court forms a committee to oversee smooth transition from IPC, CrPC to Bharatiya Nyaya Sanhita across all states.",
+      category: "policy",
+      fullContent: "The Apex court directed all High Courts to expedite training for judicial officers on the new criminal codes. The bench stressed that citizens' rights must not be compromised during the transition. Deadline set for digital infrastructure upgrade in lower courts for e-FIR and virtual hearings.",
+      date: "5 May 2025",
+      icon: "file-alt"
+    },
+    {
+      id: 5,
+      title: "NCLAT upholds CCI penalty on cartelization in cement industry",
+      description: "Tribunal confirms ₹1,200 crore penalty on major cement manufacturers for price cartelization, upholds fair competition.",
+      category: "tribunal",
+      fullContent: "NCLAT held that the CCI had rightly established anti-competitive conduct, and the fines were proportionate. The ruling strengthens India’s competition law regime and deters collusive practices in essential commodities. The tribunal also asked for compliance within 90 days.",
+      date: "12 May 2025",
+      icon: "users"
+    },
+    {
+      id: 6,
+      title: "SC Collegium reiterates transparency: recommends 5 new judges to Supreme Court",
+      description: "Collegium releases names, citing diversity and seniority; includes 2 women judges from high courts.",
+      category: "supreme court",
+      fullContent: "The Supreme Court Collegium headed by CJI recommended the appointment of five judges including two women. The collegium highlighted judicial merit and representation from various high courts. This move is hailed as step towards judicial diversity and transparency in appointment process.",
+      date: "20 May 2025",
+      icon: "landmark"
+    },
+    {
+      id: 7,
+      title: "Kerala HC: Right to access OTT platforms can't be unrestricted for minors - new parental guidelines",
+      description: "Court directs state to frame guidelines for age-restricted streaming content, proposes digital rating system.",
+      category: "high court",
+      fullContent: "Kerala High Court observed that while OTT platforms are a medium of entertainment, platforms must implement robust parental locks and age-verification. The court asked the Centre to consider a statutory code within three months, balancing free speech with child protection.",
+      date: "8 May 2025",
+      icon: "building"
+    },
+    {
+      id: 8,
+      title: "Landmark Judgment: SC expands definition of 'living will' and passive euthanasia",
+      description: "Supreme Court clarifies advance medical directives, empowers patients' dignity in terminal illness.",
+      category: "judgment",
+      fullContent: "In a progressive verdict, the Supreme Court eased procedural hurdles for executing living wills. The bench upheld the right to die with dignity as part of Article 21. The new guidelines simplify the authentication process, reducing family distress in end-of-life situations.",
+      date: "1 May 2025",
+      icon: "scroll"
+    },
+    {
+      id: 9,
+      title: "Government notifies new data protection rules for legal firms handling client data",
+      description: "Legal professionals under DPDP Act obligations: heavy penalties for breach of client confidentiality.",
+      category: "policy",
+      fullContent: "The Ministry of Electronics & IT notified specific rules for law firms under the Digital Personal Data Protection Act, 2023. Lawyers handling sensitive client data must appoint data protection officers and report breaches within 72 hours. This is first-of-its-kind regulation for legal industry in India.",
+      date: "14 May 2025",
+      icon: "file-alt"
+    },
+    {
+      id: 10,
+      title: "NCLAT allows insolvency plea against ed-tech major for non-payment to teachers",
+      description: "Tribunal holds that unpaid salaries of faculty constitute operational debt, CIRP admitted.",
+      category: "tribunal",
+      fullContent: "NCLAT dismissed the appeal of an ed-tech company, paving way for insolvency resolution. The bench observed that non-payment of salaries for months violates employees' rights and admitted the plea under Section 9 of IBC. Thousands of teachers may benefit.",
+      date: "9 May 2025",
+      icon: "users"
+    },
+    {
+      id: 11,
+      title: "Punjab & Haryana HC: Can't arrest accused under Section 498A without preliminary inquiry",
+      description: "High Court mandates social welfare committee review before arrest in matrimonial cruelty cases to prevent misuse.",
+      category: "high court",
+      fullContent: "In a significant judgment, the court ruled that immediate arrests in dowry harassment cases violate personal liberty. Police must conduct a preliminary verification within 15 days. The directive aims to strike balance between victim protection and false implication safeguards.",
+      date: "16 May 2025",
+      icon: "building"
+    },
+    {
+      id: 12,
+      title: "Supreme Court directs ECI to ensure 'None of the Above' option in all future EVMs",
+      description: "SC calls NOTA a fundamental right of voter, asks EC to strengthen awareness campaigns.",
+      category: "supreme court",
+      fullContent: "A bench of Justices directed the Election Commission to prominently display NOTA as an independent choice and count it effectively. The court also recommended that if NOTA gets highest votes, fresh elections with debarring of candidates be considered, although the legislature must act.",
+      date: "19 May 2025",
+      icon: "gavel"
+    }
+  ];
+
+  // Helper: format date for card (just show month and day)
+  function formatDateShort(dateStr) {
+    const d = new Date(dateStr);
+    return d.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
+  }
+
+  let activeFilter = "all";
+  let currentNews = [...legalNewsData];
+
+  const gridContainer = document.getElementById("newsGridContainer");
+  const totalNewsSpan = document.getElementById("totalNewsCount");
+
+  function renderNews() {
+    if (!gridContainer) return;
+    let filtered = currentNews;
+    if (activeFilter !== "all") {
+      filtered = currentNews.filter(item => item.category === activeFilter);
+    }
+    totalNewsSpan.innerText = filtered.length;
+
+    if (filtered.length === 0) {
+      gridContainer.innerHTML = `<div class="no-results"><i class="fas fa-search" style="font-size: 2rem; margin-bottom: 1rem; display: block;"></i> No legal updates in this category. Check back soon! <br> 🇮🇳 Stay updated with GujLaw</div>`;
+      return;
+    }
+
+    const cardsHTML = filtered.map(news => `
+      <div class="news-card" data-id="${news.id}">
+        <div class="card-badge"><i class="fas fa-${news.icon || 'balance-scale'}"></i> ${news.category.toUpperCase()}</div>
+        <div class="card-content">
+          <div class="news-title">${escapeHtml(news.title)}</div>
+          <div class="news-desc">${escapeHtml(news.description)}</div>
+          <div class="card-meta">
+            <div class="date-badge"><i class="far fa-calendar-alt"></i> ${formatDateShort(news.date)}</div>
+            <button class="read-more" data-id="${news.id}">Read full →</button>
+          </div>
+        </div>
+      </div>
+    `).join("");
+    gridContainer.innerHTML = cardsHTML;
+
+    // attach event listeners to each read-more button
+    document.querySelectorAll('.read-more').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const id = parseInt(btn.getAttribute('data-id'));
+        const newsItem = legalNewsData.find(n => n.id === id);
+        if (newsItem) openModal(newsItem);
+      });
+    });
+  }
+
+  // simple escape
+  function escapeHtml(str) {
+    return str.replace(/[&<>]/g, function(m) {
+      if(m === '&') return '&amp;';
+      if(m === '<') return '&lt;';
+      if(m === '>') return '&gt;';
+      return m;
+    });
+  }
+
+  // Modal handling
+  const modal = document.getElementById("newsModal");
+  const modalTitle = document.getElementById("modalTitle");
+  const modalBody = document.getElementById("modalBody");
+
+  function openModal(news) {
+    modalTitle.innerText = news.title;
+    let fullTextWithMeta = `<div style="margin-bottom: 12px; display: flex; gap: 16px; flex-wrap: wrap;"><span><i class="fas fa-tag"></i> Category: <strong>${news.category.toUpperCase()}</strong></span> <span><i class="far fa-calendar"></i> ${formatDateShort(news.date)}</span></div><hr style="margin: 12px 0;"/><p style="font-size: 1rem;">${escapeHtml(news.fullContent)}</p><br/><p style="color: #2c3e66;"><i class="fas fa-gavel"></i> Source: GujLaw Bureau • India Legal Dispatch</p>`;
+    modalBody.innerHTML = fullTextWithMeta;
+    modal.style.display = "flex";
+    document.body.style.overflow = "hidden";
+  }
+
+  function closeModal() {
+    modal.style.display = "none";
+    document.body.style.overflow = "";
+  }
+
+  // filter buttons active state
+  function initFilters() {
+    const filterBtns = document.querySelectorAll(".filter-btn");
+    filterBtns.forEach(btn => {
+      btn.addEventListener("click", () => {
+        const filterValue = btn.getAttribute("data-filter");
+        activeFilter = filterValue;
+        filterBtns.forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        renderNews();
+      });
+    });
+  }
+
+  // update total categories count (static for info)
+  document.getElementById("activeCategories") && (document.getElementById("activeCategories").innerText = "6");
+
+  // attach modal close events
+  document.getElementById("closeModalBtn")?.addEventListener("click", closeModal);
+  document.getElementById("modalCloseFooter")?.addEventListener("click", closeModal);
+  window.addEventListener("click", (e) => {
+    if (e.target === modal) closeModal();
+  });
+
+  // initial sort by date (newest first)
+  legalNewsData.sort((a,b) => new Date(b.date) - new Date(a.date));
+  currentNews = legalNewsData;
+  renderNews();
+  initFilters();
+
+  // optional: responsive filter scroll hint (cosmetic)
+  console.log("GujLaw — India's most advanced legal news platform ready");
+</script>
+</body>
+</html>
+```
